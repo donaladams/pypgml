@@ -1,0 +1,1 @@
+Implementations of concepts from [Probabilistic Graphical Models](http://pgm.stanford.edu/).
