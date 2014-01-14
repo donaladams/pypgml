@@ -10,7 +10,7 @@ def get_test_data():
 
     params_one = {
         (0, 0): 0.1,
-        (0, 1): .2,
+        (0, 1): 0.2,
         (0, 2): 0.4,
         (0, 3): 0.3,
         (1, 0): 0.1,
@@ -57,5 +57,18 @@ class TestVariableElimination(object):
         result.normalise()
         print result.parameters
 
+
+    def test_run_with_evidence(self):
+        variables, factors = get_test_data()
+        to_eliminate = [variables[1]]
+        ve = VariableElimination(variables, factors)
+        # get p(Gender|HairColour=Red)
+        result = ve.query(['Gender'], [('HairColour', 0), ('IsDyed', 1)])
+        print result
+        print result.parameters
+        result.normalise()
+        print result.parameters
+        #p(Gender=Female | HairColour=Red, IsDyed=True)
+        assert result.value_of_assignment((1,)) == 0.7142857142857143
 
 

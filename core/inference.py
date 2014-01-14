@@ -2,13 +2,44 @@
 from copy import deepcopy
 
 class VariableElimination(object):
-
+    """ Implements the Variable Elimination algorithm
+        for a set of factors. """
     def __init__(self, variables, factors):
-        self.variables = variables
+        self.variables = deepcopy(variables)
         self.factors = set(factors)
 
-    def query(self, names):
-        pass
+    def query(self, names, evidence=None):
+
+        print "\nquery({0} | {1})".format(names, evidence)
+        # get the variables to be eliminated
+        to_eliminate = self.get_complement_of_vars_by_name(names)
+
+        # incorporate evidence if necessary
+        self.incorporate_evidence(evidence)
+
+        # run variable elimination:
+        return self.sum_product_ve(to_eliminate)
+
+    def incorporate_evidence(self, evidence):
+        """ Add evidence in form [("name", value)...] to the factors."""
+        if evidence:
+            ev_size = len(evidence)
+            #get variables associated with evidence
+            evidence_vars = self.get_vars_by_name([x[0] for x in evidence])
+
+            # collect all evidence pertaining to a given factor
+            factor_to_evidence = {}
+            for i in xrange(ev_size):
+                evidence_var = evidence_vars[i]
+                factors = self.get_related_factors(self.factors, evidence_var)
+                for f in factors:
+                    if f not in factor_to_evidence:
+                        factor_to_evidence[f] = []
+                    factor_to_evidence[f].append(evidence[i])
+
+            # apply collected evidence to each factor
+            for factor, ev in factor_to_evidence.items():
+                factor.incorporate_evidence(ev)
 
     def sum_product_ve(self, to_eliminate):
         """ Main loop of variable elimination algorithm. """
@@ -47,3 +78,15 @@ class VariableElimination(object):
         """ Reduces a list of factors by applying factor.product(other)
             repeatedly """
         return reduce(lambda x,y: x.product(y), factors)
+
+
+    def get_vars_by_name(self, names):
+        return [
+            v for v in self.variables if v.name in names
+            ]
+
+    def get_complement_of_vars_by_name(self, names):
+        return [
+            v for v in self.variables if v.name not in names
+            ]
+

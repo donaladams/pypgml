@@ -68,8 +68,8 @@ class Factor(object):
                 self.parameters[key] /= denom
 
     def incorporate_evidence(self, evidence, normalise=False):
-        """ Record the observed evidence and set
-            incompatible assigments to p(ass) = 0 """
+        """ Record the observed evidence (as a list of name-value tuples)
+            and set incompatible assigments to p(ass) = 0 """
 
         def match(tup):
             return bool(tup[0] == tup[1] or tup[1] == None)
@@ -90,7 +90,7 @@ class Factor(object):
         self.evidence.extend(evidence)
         for i in xrange(len(indices)):
             value = evidence[i][1]
-            self.scope[i].observe(value)
+            self.scope[indices[i]].observe(value)
 
         # set incompatible assignments to prob of 0
         size = len(self.scope)
