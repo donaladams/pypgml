@@ -57,7 +57,6 @@ class TestVariableElimination(object):
         result.normalise()
         print result.parameters
 
-
     def test_run_with_evidence(self):
         variables, factors = get_test_data()
         to_eliminate = [variables[1]]

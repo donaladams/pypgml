@@ -9,7 +9,8 @@ class VariableElimination(object):
         self.factors = set(factors)
 
     def query(self, names, evidence=None):
-
+        """ Returns an un-normalised factor corresponding to
+            query(names| evidence)"""
         print "\nquery({0} | {1})".format(names, evidence)
         # get the variables to be eliminated
         to_eliminate = self.get_complement_of_vars_by_name(names)
@@ -79,13 +80,15 @@ class VariableElimination(object):
             repeatedly """
         return reduce(lambda x,y: x.product(y), factors)
 
-
     def get_vars_by_name(self, names):
+        """ Return the variables corresponding to the names."""
         return [
             v for v in self.variables if v.name in names
             ]
 
     def get_complement_of_vars_by_name(self, names):
+        """ Return all vars in self.variables that are not
+            in names. """
         return [
             v for v in self.variables if v.name not in names
             ]
