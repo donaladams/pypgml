@@ -8,7 +8,6 @@ def create_empty_table_for_factor(variables):
     keys =  product(*sizes)
     return {x: 0.0 for x in keys}
 
-
 class Factor(object):
     """ Represents a factor over a set of random variables. """
 
@@ -29,7 +28,6 @@ class Factor(object):
             raise ValueError("Assignment must be same size as scope. ")
 
         return self.parameters[assignment]
-
 
     def sum(self, names, normalise=False):
         """ Produces a new factor by marginalising the
@@ -150,4 +148,8 @@ class Factor(object):
         """ Return the names of variables in the
             factor's scope in order """
         return [x.name for x in self.scope]
+
+    def __str__(self):
+        return "factor({0})".format(tuple(self.names()))
+
 

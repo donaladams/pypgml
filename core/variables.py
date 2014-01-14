@@ -22,6 +22,12 @@ class DiscreteRandomVariable(object):
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
+
     def __unicode__(self):
         return u"Name:{0} Size:{1} Value:{2}".format(
             self.name, self.domain_size, self.observed_value)
